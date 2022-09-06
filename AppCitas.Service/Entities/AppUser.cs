@@ -1,6 +1,6 @@
 ﻿namespace AppCitas.Service.Entities
 {
-    public class AppUsers
+    public class AppUser
     {
         public int Id { get; set; }
 
