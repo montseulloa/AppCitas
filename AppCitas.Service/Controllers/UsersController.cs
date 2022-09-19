@@ -4,31 +4,28 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace AppCitas.Service.Controllers
+namespace AppCitas.Service.Controllers;
+
+public class UsersController : BaseApiController
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    private readonly DataContext _context;
+
+    public UsersController(DataContext context)
     {
-        private readonly DataContext _context;
+        _context = context;
+    }
 
-        public UsersController(DataContext context)
-        {
-            _context = context;
-        }
+    // GET api/users
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+    {
+        return await _context.Users.ToListAsync();
+    }
 
-        // GET api/users
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
-        {
-            return await _context.Users.ToListAsync();
-        }
-
-        // GET api/users/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetUserById(int id)
-        {
-            return await _context.Users.FindAsync(id);
-        }
+    // GET api/users/{id}
+    [HttpGet("{id}")]
+    public async Task<ActionResult<AppUser>> GetUserById(int id)
+    {
+        return await _context.Users.FindAsync(id);
     }
 }
