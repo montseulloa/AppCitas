@@ -5,14 +5,13 @@ namespace AppCitas.UnitTests
         [Fact]
         public void Test1()
         {
-            // AAA
             // Arrange
             var x = 1;
 
-            //Act
+            // Act
             var y = 2 * x;
 
-            //Assert
+            // Assert
             Assert.Equal(2, y);
         }
 
@@ -21,12 +20,12 @@ namespace AppCitas.UnitTests
         [InlineData(2, 4)]
         public void Test2(int x, int resp)
         {
-            //Arrange
+            // Arrange
 
-            //Act
-            var y = 2 * x;
+            // Act
+            int y = 2 * x;
 
-            //Assert
+            // Assert
             Assert.Equal(resp, y);
         }
     }
