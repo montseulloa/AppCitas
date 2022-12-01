@@ -24,7 +24,7 @@ public class UsersController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers(UserParams userParams)
+    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
     {
         var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
         userParams.CurrentUsername = user.UserName;

@@ -23,7 +23,7 @@ public class MessagesControllerTests
 
     // No se puede mandar mensaje a si misma
     [Theory]
-    [InlineData("BadRequest", "lisa", "Pa$$w0rd", "lisa", "Hola bb")]
+    [InlineData("BadRequest", "lisa", "Pa$$word", "lisa", "Hola")]
     public async Task SendMessage_ShouldBadRequest(string statusCode, string username, string password, string recipientUsername, string content)
     {
         // Arrange
@@ -50,7 +50,7 @@ public class MessagesControllerTests
 
     // No se encuentra el usuario al que se manda e mensaje
     [Theory]
-    [InlineData("NotFound", "lisa", "Pa$$w0rd", "no", "Hola bb")]
+    [InlineData("NotFound", "lisa", "Pa$$word", "no", "Hola")]
     public async Task SendMessage_ShouldNotFound(string statusCode, string username, string password, string recipientUsername, string content)
     {
         // Arrange
@@ -77,7 +77,7 @@ public class MessagesControllerTests
 
     // Sí se manda el mensaje
     [Theory]
-    [InlineData("OK", "todd", "Pa$$w0rd", "lisa", "Hola bb")]
+    [InlineData("OK", "todd", "Pa$$word", "lisa", "Hola")]
     public async Task SendMessage_ShouldOK(string statusCode, string username, string password, string recipientUsername, string content)
     {
         // Arrange
@@ -104,7 +104,7 @@ public class MessagesControllerTests
 
     // Traer todos los mensajes
     [Theory]
-    [InlineData("OK", "todd", "Pa$$w0rd")]
+    [InlineData("OK", "todd", "Pa$$word")]
     public async Task GetMessagesForUser_ShouldOK(string statusCode, string username, string password)
     {
         // Arrange
@@ -125,7 +125,7 @@ public class MessagesControllerTests
 
     //Traer toda la conversación entre dos usuarios
     [Theory]
-    [InlineData("OK", "todd", "Pa$$w0rd", "lisa")]
+    [InlineData("OK", "todd", "Pa$$word", "lisa")]
     public async Task GetMessagesThread_ShouldOK(string statusCode, string username, string password, string recipient)
     {
         // Arrange
@@ -142,9 +142,46 @@ public class MessagesControllerTests
         Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
     }
 
+    // Intentar borrar un mensaje que no es tuyo
+    [Theory]
+    [InlineData("Unauthorized", "stout", "Pa$$word", "lisa", "todd", "Hola")]
+    public async Task DeleteMessage_ShouldUnauthorized(string statusCode, string unauthorizedUser, string password, string senderUsername, string recipientUsername, string content)
+    {
+        // Arrange
+        var user = await LoginHelper.LoginUser(senderUsername, password);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
+
+        var messageDto = new MessageDto
+        {
+            RecipientUserName = recipientUsername,
+            Content = content
+        };
+        registeredObject = GetRegisterObject(messageDto);
+        httpContent = GetHttpContent(registeredObject);
+        requestUri = $"{apiRoute}";
+
+        var result = await _client.PostAsync(requestUri, httpContent);
+        var messageJson = await result.Content.ReadAsStringAsync();
+        _client.DefaultRequestHeaders.Authorization = null;
+        var message = messageJson.Split(',');
+        var id = message[0].Split("\"")[2].Split(":")[1];
+        requestUri = $"{apiRoute}/" + id;
+
+        user = await LoginHelper.LoginUser(unauthorizedUser, password);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
+
+        // Act
+        httpResponse = await _client.DeleteAsync(requestUri);
+        _client.DefaultRequestHeaders.Authorization = null;
+
+        // Assert
+        Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
+        Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
+    }
+
     // Borrar un mensaje
     [Theory]
-    [InlineData("OK", "todd", "Pa$$w0rd", "lisa", "Hola bb")]
+    [InlineData("OK", "todd", "Pa$$word", "lisa", "Hola")]
     public async Task DeleteMessage_ShouldOK(string statusCode, string username, string password, string recipientUsername, string content)
     {
         // Arrange
@@ -168,12 +205,6 @@ public class MessagesControllerTests
         // Act
         httpResponse = await _client.DeleteAsync(requestUri);
         _client.DefaultRequestHeaders.Authorization = null;
-        user = await LoginHelper.LoginUser(recipientUsername, password);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
-
-        // Act
-        httpResponse = await _client.DeleteAsync(requestUri);
-        _client.DefaultRequestHeaders.Authorization = null;
 
         // Assert
         Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
@@ -181,42 +212,7 @@ public class MessagesControllerTests
     }
 
 
-    [Theory]
-    [InlineData("Unauthorized", "bob", "Pa$$w0rd", "todd", "Hola bb", "lisa")]
-    public async Task DeleteMessage_ShouldUnauthorized(string statusCode, string username, string password, string recipientUsername, string content, string senderUsername)
-    {
-        // Arrange
-        var user = await LoginHelper.LoginUser(username, password);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
-
-        var messageDto = new MessageDto
-        {
-            RecipientUserName = recipientUsername,
-            Content = content
-        };
-        registeredObject = GetRegisterObject(messageDto);
-        httpContent = GetHttpContent(registeredObject);
-        requestUri = $"{apiRoute}";
-        var result = await _client.PostAsync(requestUri, httpContent);
-        var messageJson = await result.Content.ReadAsStringAsync();
-        _client.DefaultRequestHeaders.Authorization = null;
-        var message = messageJson.Split(',');
-        var id = message[0].Split("\"")[2].Split(":")[1];
-        requestUri = $"{apiRoute}/" + id;
-
-        user = await LoginHelper.LoginUser(senderUsername, password);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
-
-        // Act
-        httpResponse = await _client.DeleteAsync(requestUri);
-        _client.DefaultRequestHeaders.Authorization = null;
-
-        // Assert
-        Assert.Equal(Enum.Parse<HttpStatusCode>(statusCode, true), httpResponse.StatusCode);
-        Assert.Equal(statusCode, httpResponse.StatusCode.ToString());
-    }
-
-
+ 
     #region Privated methods
     private static string GetRegisterObject(MessageDto message)
     {

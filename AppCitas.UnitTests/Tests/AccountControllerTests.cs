@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AppCitas.UnitTests.Test;
+namespace AppCitas.UnitTests.Tests;
 
 public class AccountControllerTests
 {
@@ -54,7 +54,7 @@ public class AccountControllerTests
     }
 
     [Theory]
-    [InlineData("OK", "arturo", "Arturo", "male", "2000-01-01", "Aguascalientes", "Mexico", "Pa$$w0rd")]
+    [InlineData("OK", "arturo", "Arturo", "male", "2000-01-01", "Aguascalientes", "Mexico", "Pa$$word")]
     public async Task Register_ShouldOk(string statusCode, string username, string knownAs, string gender, DateTime dateOfBirth, string city, string country, string password)
     {
         // Arrange
@@ -105,7 +105,7 @@ public class AccountControllerTests
     }
 
     [Theory]
-    [InlineData("OK", "lisa", "Pa$$w0rd")]
+    [InlineData("OK", "lisa", "Pa$$word")]
     public async Task Login_ShouldOK(string statusCode, string username, string password)
     {
         // Arrange
