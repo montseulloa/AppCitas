@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
 import { User } from 'src/app/_models/users';
@@ -20,12 +21,12 @@ export class MemberEditComponent implements OnInit {
   }
   member: Member | undefined;
   user: User | null = null;
-  toastr: any;
 
-  constructor(private accountService: AccountService, private membersService: MembersService) {
+  constructor(private accountService: AccountService, private membersService: MembersService,  private toastr: ToastrService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
+    console.log(this.user, '?');
   }
 
   ngOnInit(): void {
@@ -40,8 +41,11 @@ export class MemberEditComponent implements OnInit {
   }
 
   updateMember(){
-    console.log(this.member);
-    this.toastr.success();
-    this.editForm?.reset(this.member);
+    this.membersService.updateMember(this.editForm?.value).subscribe({
+      next: _ => {
+        this.toastr.success('Profile updated!');
+        this.editForm?.reset(this.member);
+      }
+    });
   }
 }
