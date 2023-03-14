@@ -348,3 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+AppCitas.Service/appcitas.db-shm
+AppCitas.Service/appcitas.db-wal
