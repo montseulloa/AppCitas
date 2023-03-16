@@ -7,7 +7,7 @@
         placeholder={{label}}
     >
     <div class="invalid-feedback" *ngIf="control.errors?.['required']">Por favor ingrese un(a) {{label}}</div>
-    <div class="invalid-feedback" *ngIf="control.errors?.['minlength']">El campo  {{label}} debe tener al menos {{control.errors?.['minlength']}} caracteres</div>
-    <div class="invalid-feedback" *ngIf="control.errors?.['maxlength']">El campo  {{label}} debe tener máximo {{control.errors?.['maxlength']}} caracteres</div>
+    <div class="invalid-feedback" *ngIf="control.errors?.['minlength']">El campo  {{label}} debe tener al menos {{control.errors?.['minlength'].requiredLength}} caracteres</div>
+    <div class="invalid-feedback" *ngIf="control.errors?.['maxlength']">El campo  {{label}} debe tener máximo {{control.errors?.['maxlength'].requiredLength}} caracteres</div>
     <div class="invalid-feedback" *ngIf="control.errors?.['notMatching']">Las cotraseñas no coinciden</div>
 </div>
