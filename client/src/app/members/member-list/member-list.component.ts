@@ -20,6 +20,7 @@ export class MemberListComponent implements OnInit {
 
   ngOnInit(): void {
     // this.members$ = this.memberService.getMembers();
+    this.loadMembers();
   }
 
   loadMembers() {
@@ -31,6 +32,13 @@ export class MemberListComponent implements OnInit {
         }
       }
     })
+  }
+
+  pageChanged(event: any) {
+    if(this.pageNumber !== event.page) {
+      this.pageNumber = event.page;
+      this.loadMembers();
+    }
   }
 
 }
