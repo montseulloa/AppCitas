@@ -1,6 +1,6 @@
 ﻿namespace AppCitas.Service.Helpers;
 
-public class UserParams : PaginationParams
+export public class UserParams : PaginationParams
 {
     public string CurrentUsername { get; set; }
     public string Gender { get; set; }
