@@ -4,6 +4,7 @@ import { map, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
 import { PaginatedResult } from '../_models/pagination';
+import { UserParams } from '../_models/userParams';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +20,14 @@ export class MembersService {
     params = params.append('minAge', userParams.minAge);
     params = params.append('maxAge', userParams.maxAge);
     params = params.append('gender', userParams.gender);
+    params = params.append('orderBy', userParams.orderBy);
 
     return this.getPaginatedResults<Member[]>(this.baseUrl + 'users', params);
   }
 
   private getPaginatedResults<T>(url: string, params: HttpParams) {
-    const paginatedResult: PaginatedResult<T[]> = new PaginatedResult<T[]>
-    return this.http.get<T[]>(url, { observe: 'response', params }).pipe(
+    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>
+    return this.http.get<T>(url, { observe: 'response', params }).pipe(
       map(response => {
         if (response.body) {
           paginatedResult.result = response.body;

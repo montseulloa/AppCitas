@@ -3,6 +3,7 @@ import { Observable, take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
 import { Pagination } from 'src/app/_models/pagination';
 import { User } from 'src/app/_models/user';
+import { UserParams } from 'src/app/_models/userParams';
 import { AccountService } from 'src/app/_services/account.service';
 import { MembersService } from 'src/app/_services/members.service';
 
@@ -18,12 +19,13 @@ export class MemberListComponent implements OnInit {
   pagination: Pagination | undefined;
   userParams: UserParams | undefined;
   user: User | undefined;
+  genderList = [{ value: 'male', display: 'Males' }, { value: 'female', display: 'Females' }];
 
   constructor(private memberService: MembersService, private accountService: AccountService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if (user) {
-        this.userParams = new userParams(user);
+        this.userParams = new UserParams(user);
         this.user = user;
       }}
     })
@@ -44,6 +46,13 @@ export class MemberListComponent implements OnInit {
         }
       }
     })
+  }
+
+  resetFilters() {
+    if (this.user) {
+      this.userParams = new UserParams(this.user);
+      this.loadMembers();
+    }
   }
 
   pageChanged(event: any) {
