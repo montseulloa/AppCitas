@@ -1,2 +1,2 @@
-# AppCitas
-Curso de Servicios Web para ICI 2022
+# AppCitasClient
+Curso de Angular para ICI de decimo semestre.

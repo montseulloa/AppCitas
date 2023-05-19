@@ -1,5 +1,5 @@
 <div class="mb-3">
-    <input 
+    <input
         type="text"
         [class.is-invalid]="control.touched && control.invalid"
         class="form-control"
@@ -9,5 +9,7 @@
         [bsConfig]="bsConfig"
         [maxDate]="maxDate"
     >
-    <div class="invalid-feedback" *ngIf="control.errors?.['required']">El campo {{label}} es requerido</div>
+    <div *ngIf="control.errors?.['required']" class="invalid-feedback">
+        El campo {{label}} es requerido
+    </div>
 </div>

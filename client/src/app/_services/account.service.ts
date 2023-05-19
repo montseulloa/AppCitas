@@ -14,7 +14,7 @@ export class AccountService {
 
   constructor(private http: HttpClient) { }
 
-  login(model: any){
+  login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
       map((response: User) => {
         const user = response;
@@ -28,10 +28,9 @@ export class AccountService {
   register(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
       map(user => {
-        if(user){
+        if (user) {
           this.setCurrentUser(user);
         }
-        return user;
       })
     );
   }

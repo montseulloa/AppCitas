@@ -7,10 +7,10 @@ import { MemberEditComponent } from '../members/member-edit/member-edit.componen
 })
 export class PreventUnsavedChangesGuard implements CanDeactivate<MemberEditComponent> {
   canDeactivate(component: MemberEditComponent): boolean {
-    if(component.editForm?.dirty){
+    if (component.editForm?.dirty) {
       return confirm('Si abandonas la página se perderán tus cambios, ¿continuar?');
     }
     return true;
   }
-  
+
 }

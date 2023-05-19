@@ -1,10 +1,10 @@
 <div class="container mt-5">
-    <div *ngIf="!registerMode" style="text-align: center">
+    <div *ngIf="!registerMode" style="text-align: center;">
         <h1>Encuentra a tu pareja</h1>
         <p class="lead">Entra para ver tus posibles parejas... ¡solo necesitas registrarte!</p>
-        <div class="text-acenter">
-            <button (click)="registerToggle()" class="btn btn-info btn-lg me-2">Register</button>
-            <button class="btn btn-dark btn-lg">Learn more</button>
+        <div class="text-center">
+            <button (click)="registerToggle()" class="btn btn-primary btn-lg me-2">Register</button>
+            <button class="btn btn-primary btn-info btn-lg">Learn more</button>
         </div>
     </div>
     <div *ngIf="registerMode" class="container">

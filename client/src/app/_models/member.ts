@@ -1,7 +1,6 @@
 import { Photo } from "./photo";
 
 export interface Member {
-interests: any;
     id: number;
     username: string;
     photoUrl: string;
@@ -12,9 +11,8 @@ interests: any;
     gender: string;
     introduction: string;
     lookingFor: string;
+    interests: string;
     city: string;
     country: string;
     photos: Photo[];
 }
-
-
